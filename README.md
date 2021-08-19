@@ -30,6 +30,7 @@ On GCC 9.3.0 + CUDA 11.2, we get the following during the compilation
 ```
 Segmentation fault (core dumped)
 ```
+or check [here](https://github.com/Ahdhn/nvcc_bug_maybe/runs/3367653261?check_suite_focus=true#step:7:20) for On GCC 9.3.0 + CUDA 11.3
 
 On Visual Studio 2019 + CUDA 11.4, at one step during the compilation, we get the following from the Output windows 
 ```
@@ -56,4 +57,4 @@ LLVMSymbolizer: error reading file: 'ntdll.pdb': no such file or directory
 main.cu
 CUDACOMPILE : nvcc error : 'cicc' died with status 0xC0000005 (ACCESS_VIOLATION)
 ```
-
+or check [here](https://github.com/Ahdhn/nvcc_bug_maybe/runs/3367653262?check_suite_focus=true#step:7:24) for On Visual Studio 2019 + CUDA 11.3
