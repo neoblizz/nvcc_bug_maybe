@@ -1,5 +1,5 @@
 # NVCC Bug? 
-The goal of this code is to showcase a possible compiler bug with NVCC. The bug seems to happen when a kernel uses a lambda function that captures by value an object. The code is too simple to parse (less than 50 lines). The relevant part shown below where `Vector` is a simple class that defines its own copy constructor, destructor, and assignment operator 
+The goal of this code is to showcase a possible compiler bug with NVCC. The bug seems to happen when a kernel uses a lambda function that captures an object by value. The code is too simple to parse (less than 50 lines). The relevant part shown below where `Vector` is a simple class that defines its own copy constructor, destructor, and assignment operator 
 
 ```
 template <typename T>
