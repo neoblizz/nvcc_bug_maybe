@@ -1,6 +1,4 @@
-#include <cuda_runtime.h>
 #include <stdio.h>
-#include <nvfunctional>
 
 template <class T>
 class Vector
@@ -28,11 +26,6 @@ class Vector
     uint32_t m_size;
 };
 
-__device__ void call_print(nvstd::function<void()> print_fun)
-{
-    print_fun();
-}
-
 template <typename T>
 __global__ void mainKernel(Vector<T> vec)
 {
@@ -41,7 +34,7 @@ __global__ void mainKernel(Vector<T> vec)
         printf("\n vec size = %d\n", vec.m_size);
     };
 
-    call_print(print_vector_size);
+    print_vector_size();    
 }
 
 int main(int argc, char** argv)
