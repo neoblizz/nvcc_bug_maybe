@@ -1,38 +1,55 @@
-#include <assert.h>
 #include <cuda_runtime.h>
 #include <stdio.h>
 #include <nvfunctional>
-#include "gtest/gtest.h"
 
-__device__ void call_print(nvstd::function<void(int&, bool&)> print_fun)
+template <class T>
+class Vector
 {
-    int  val = 10;
-    bool check = true;
-    print_fun(val, check);
+   public:
+    __host__ __device__ Vector() : m_size(0)
+    {
+    }
+
+    __host__ __device__ Vector(const Vector& rhs)
+    {
+        m_size = rhs.m_size;
+    }
+
+    __host__ __device__ Vector& operator=(const Vector& rhs)
+    {
+        m_size = rhs.m_size;
+        return *this;
+    }
+
+    __host__ __device__ ~Vector()
+    {
+    }
+
+    uint32_t m_size;
+};
+
+__device__ void call_print(nvstd::function<void()> print_fun)
+{
+    print_fun();
 }
 
-__global__ void mainKernel()
+template <typename T>
+__global__ void mainKernel(Vector<T> vec)
 {
-
-    auto print_me = [=](int& val, bool& check) {
-        if (check) {
-            printf("\n val = %d\n", val);
-        }
+    // Change this lambda function to capture by reference ([&]) fixes the bug
+    auto print_vector_size = [=]() {
+        printf("\n vec size = %d\n", vec.m_size);
     };
 
-    call_print(print_me);
-}
-
-TEST(Test, simple)
-{
-    mainKernel<<<1, 1>>>();
-    auto err = cudaDeviceSynchronize();
-    EXPECT_EQ(err, cudaSuccess);
+    call_print(print_vector_size);
 }
 
 int main(int argc, char** argv)
 {
-    ::testing::InitGoogleTest(&argc, argv);
+    Vector<int> vec;
+    vec.m_size = 10;
 
-    return RUN_ALL_TESTS();
+    mainKernel<<<1, 1>>>(vec);
+
+    cudaDeviceSynchronize();
 }
