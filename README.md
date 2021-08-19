@@ -17,6 +17,8 @@ Changing the lambda function to capture by reference ([&]) fixes the bug.
 
 ## Build 
 ```
+git clone https://github.com/Ahdhn/nvcc_bug_maybe.git
+cd nvcc_bug_maybe
 mkdir build
 cd build 
 cmake ..
