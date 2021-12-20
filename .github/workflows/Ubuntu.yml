@@ -1,26 +1,43 @@
+# Gunrock/Essentials Ubuntu Workflow
 name: Ubuntu
-on: [push, pull_request]
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master and dev branch
+  push:
+    branches: [ master, dev ]
+  pull_request:
+    branches: [ master, dev ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  UbuntuRun:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: Jimver/cuda-toolkit@v0.2.4
+      # Fetch CUDA toolkit using Jimver/cuda-toolkit@v0.2.5
+      - name: Fetch CUDA toolkit
+        uses: Jimver/cuda-toolkit@v0.2.5
         id: cuda-toolkit
         with:
-          cuda: '11.3.1'
-          linux-local-args: '["--toolkit"]'      
-      - run: nvcc -V      
-      - name: Checkout
-        uses: actions/checkout@v2            
-      - name: Create build directory
-        run: mkdir ${{github.workspace}}/build      
-      - name: Configure CMake
-        working-directory: ${{github.workspace}}/build
-        run: cmake ../
-      - name: Run make
-        working-directory: ${{github.workspace}}/build
-        run: make -j      
-      #- name: Run Test
-      #  working-directory: ${{github.workspace}}/build
-      #  run: ctest --no-compress-output -T Test -C Release --output-on-failure
-      - run: echo "This job's status is ${{ job.status }}."
+          cuda: '11.5.1'
+          linux-local-args: '["--toolkit"]'
+
+      # Runs a single command using the runners shell
+      - name: Check nvcc version
+        run: nvcc -V
+        
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: Configure cmake
+        run: cmake -B ${{github.workspace}}/build
+        
+      - name: Build all applications
+        run: cmake  --build ${{github.workspace}}/build
