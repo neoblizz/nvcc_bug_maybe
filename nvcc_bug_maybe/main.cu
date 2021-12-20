@@ -32,6 +32,8 @@ __global__ void mainKernel(Vector<T> vec)
     // Change this lambda function to capture by reference ([&]) fixes the bug
     auto print_vector_size = [=]() {
         printf("\n vec size = %d\n", vec.m_size);
+       int y = 0;
+       int x = y == 0 ?: 1; // only works on GCC
     };
 
     print_vector_size();    
